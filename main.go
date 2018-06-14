@@ -22,6 +22,7 @@ func runFundementals() {
 
 func runAlgorithms() {
 	fmt.Println("running algorithms")
-	fmt.Printf("normal recursive fibonacci: %d\n", algorithm.FibRecursiveNormal(40))
-	fmt.Printf("goroutine recursive fibonacci: %d\n", algorithm.FibRecursiveGo(10))
+	fmt.Printf("normal recursive fibonacci: %d\n", algorithm.FibRecursiveNormal(15))
+	fmt.Printf("normal iterative fibonacci: %d\n", algorithm.FibIterativeNormal(15))
+	fmt.Printf("goroutine recursive fibonacci: %d\n", algorithm.FibRecursiveGo(15))
 }

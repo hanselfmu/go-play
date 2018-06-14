@@ -2,14 +2,20 @@ package algorithm
 
 import "testing"
 
-func BenchmarkFib40(b *testing.B) {
+func BenchmarkFibRecNormal15(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		Fibonacci(40)
+		FibRecursiveNormal(15)
 	}
 }
 
-func BenchmarkFibGo40(b *testing.B) {
+func BenchmarkFibIteNormal15(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		FibGo(40)
+		FibIterativeNormal(15)
+	}
+}
+
+func BenchmarkFibRecGo15(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		FibRecursiveGo(15)
 	}
 }
