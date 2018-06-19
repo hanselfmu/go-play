@@ -5,10 +5,6 @@ import (
 	"strconv"
 )
 
-// Generic helps generic types to be parameterized
-type Generic interface {
-}
-
 type sampleStruct struct {
 	a int
 	b int
@@ -18,7 +14,7 @@ type sampleStruct struct {
 // TestPointers tests pointer operations in Go
 func TestPointers() {
 	a := "1"
-	b := 456789123456
+	b := 456
 	c := "789"
 	d := 123
 	pa := &a
@@ -38,9 +34,7 @@ func PrintMemoryLayout() {
 }
 
 func getIntFromPointer(ptr Generic) int {
-	fmt.Printf("incoming %d\n", ptr)
 	r, _ := strconv.Atoi(fmt.Sprintf("%d", ptr))
-	fmt.Printf("got result %d\n", r)
 	return r
 }
 
