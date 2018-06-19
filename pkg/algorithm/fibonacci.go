@@ -1,7 +1,6 @@
 package algorithm
 
 import (
-	"runtime"
 	"sync"
 )
 
@@ -26,8 +25,7 @@ func FibIterativeNormal(n int) int {
 
 	x, y := 0, 1
 	for i := 2; i <= n; i++ {
-		y = x + y
-		x = y - x
+		x, y = y, x+y
 	}
 
 	return y
@@ -49,8 +47,8 @@ func fibRecursiveGo(n int, c chan int, wg *sync.WaitGroup) {
 }
 
 // FibRecursiveGo uses goroutines to speed up fibonacci calculation
+// You can also tweek GOMAXPROCS to see how performance changes with the number of processors
 func FibRecursiveGo(n int) int {
-	runtime.GOMAXPROCS(2)
 	var wg sync.WaitGroup
 	c := make(chan int, 1) // here is tricky; a bufferless channel won't work
 	fibRecursiveGo(n, c, &wg)
