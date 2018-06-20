@@ -1,4 +1,4 @@
-package fundemental
+package fundamental
 
 import (
 	"sort"

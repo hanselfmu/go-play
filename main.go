@@ -4,20 +4,21 @@ import (
 	"fmt"
 
 	a "github.com/hanselfmu/go-play/pkg/algorithm"
-	f "github.com/hanselfmu/go-play/pkg/fundemental"
+	f "github.com/hanselfmu/go-play/pkg/fundamental"
 )
 
 func main() {
-	runFundementals(f.Set{
+	runfundamentals(f.Set{
 		"pointer": f.SetValStub,
 		"math":    f.SetValStub,
 	})
 	runAlgorithms(f.Set{
-		"fibonacci": f.SetValStub,
+		"fibonacci":   f.SetValStub,
+		"binary tree": f.SetValStub,
 	})
 }
 
-func runFundementals(tasks f.Set) {
+func runfundamentals(tasks f.Set) {
 	if tasks.Contains("pointer") {
 		f.TestPointers()
 	}
@@ -38,5 +39,10 @@ func runAlgorithms(tasks f.Set) {
 		fmt.Printf("normal recursive fibonacci: %d\n", a.FibRecursiveNormal(15))
 		fmt.Printf("normal iterative fibonacci: %d\n", a.FibIterativeNormal(15))
 		fmt.Printf("goroutine recursive fibonacci: %d\n", a.FibRecursiveGo(15))
+	}
+
+	if tasks.Contains("binary tree") {
+
+		fmt.Printf("binary search tree")
 	}
 }

@@ -1,4 +1,4 @@
-package fundemental
+package fundamental
 
 // Set is a simple set implementation, ignoring thread safety
 type Set map[Generic]struct{}
