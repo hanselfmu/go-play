@@ -18,6 +18,15 @@ func Abs(x int) int {
 	return (x + mask) ^ mask
 }
 
+// Max returns the bigger number between x and y
+func Max(x, y int) int {
+	if x > y {
+		return x
+	}
+
+	return y
+}
+
 // Sqrt computes square root for a float
 func Sqrt(x float64) float64 {
 	const MinChange = 0.0001

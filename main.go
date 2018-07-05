@@ -9,11 +9,11 @@ import (
 
 func main() {
 	runfundamentals(f.Set{
-		"pointer": f.SetValStub,
-		"math":    f.SetValStub,
+		// "pointer": f.SetValStub,
+		// "math":    f.SetValStub,
 	})
 	runAlgorithms(f.Set{
-		"fibonacci":   f.SetValStub,
+		// "fibonacci":   f.SetValStub,
 		"binary tree": f.SetValStub,
 	})
 }
@@ -42,7 +42,17 @@ func runAlgorithms(tasks f.Set) {
 	}
 
 	if tasks.Contains("binary tree") {
+		bt := f.NewBinaryTree([]f.Comparable{
+			f.ComparableInt(1),
+			f.ComparableInt(2),
+			f.ComparableInt(4),
+			f.ComparableInt(-1),
+			f.ComparableInt(5),
+			f.ComparableInt(3)})
 
-		fmt.Printf("binary search tree")
+		fmt.Printf("binary search tree: %v\n", bt)
+		fmt.Printf("binary search tree right: %v\n", bt.Right)
+		fmt.Printf("binary search tree depth recursive: %v\n", bt.DepthRec())
+		fmt.Printf("binary search tree depth iterative: %v\n", bt.DepthIte())
 	}
 }
