@@ -1,7 +1,5 @@
 package fundamental
 
-import "fmt"
-
 // BinaryTree is a binary tree node
 type BinaryTree struct {
 	Value       Comparable
@@ -16,7 +14,6 @@ func NewBinaryTree(vals []Comparable) *BinaryTree {
 // Init initializes a new binary tree with an array of data
 func (bt *BinaryTree) Init(vals []Comparable) *BinaryTree {
 	for _, val := range vals {
-		fmt.Printf("inserting %d for tree %v at %p\n", val, *bt, bt)
 		bt.Insert(val)
 	}
 
