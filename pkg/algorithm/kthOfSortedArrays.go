@@ -45,13 +45,15 @@ func KthOfSortedArrays(arr1, arr2 []int, k int) int {
 		split = len2 - 1
 	}
 
-	if split == 0 {
-		
-	}
-
 	if arr1[split] < arr2[split] {
+		if split == 0 {
+			split++
+		}
 		return KthOfSortedArrays(arr1[split:len1], arr2, k-split)
 	} else {
+		if split == 0 {
+			split++
+		}
 		return KthOfSortedArrays(arr1, arr2[split:len2], k-split)
 	}
 }

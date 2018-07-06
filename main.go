@@ -16,6 +16,7 @@ func main() {
 		// "fibonacci":   f.SetValStub,
 		"binary tree":         f.SetValStub,
 		"kth of sorted array": f.SetValStub,
+		"lemonade change":     f.SetValStub,
 	})
 }
 
@@ -77,19 +78,27 @@ func runAlgorithms(tasks f.Set) {
 		arr1 := []int{11, 13, 16, 19, 20, 26}
 		arr2 := []int{-5, -2, 1, 3, 6, 18, 21, 25}
 
-		fmt.Printf("kth: %d\n", a.KthOfSortedArrays(arr1, arr2, 0))
-		fmt.Printf("kth: %d\n", a.KthOfSortedArrays(arr1, arr2, 1))
-		fmt.Printf("kth: %d\n", a.KthOfSortedArrays(arr1, arr2, 2))
-		fmt.Printf("kth: %d\n", a.KthOfSortedArrays(arr1, arr2, 3))
-		fmt.Printf("kth: %d\n", a.KthOfSortedArrays(arr1, arr2, 4))
-		fmt.Printf("kth: %d\n", a.KthOfSortedArrays(arr1, arr2, 5))
-		fmt.Printf("kth: %d\n", a.KthOfSortedArrays(arr1, arr2, 6))
-		fmt.Printf("kth: %d\n", a.KthOfSortedArrays(arr1, arr2, 7))
-		fmt.Printf("kth: %d\n", a.KthOfSortedArrays(arr1, arr2, 8))
-		fmt.Printf("kth: %d\n", a.KthOfSortedArrays(arr1, arr2, 9))
-		fmt.Printf("kth: %d\n", a.KthOfSortedArrays(arr1, arr2, 10))
-		fmt.Printf("kth: %d\n", a.KthOfSortedArrays(arr1, arr2, 11))
-		fmt.Printf("kth: %d\n", a.KthOfSortedArrays(arr1, arr2, 12))
-		fmt.Printf("kth: %d\n", a.KthOfSortedArrays(arr1, arr2, 13))
+		fmt.Printf("1st: %d\n", a.KthOfSortedArrays(arr1, arr2, 0))
+		fmt.Printf("2nd: %d\n", a.KthOfSortedArrays(arr1, arr2, 1))
+		fmt.Printf("3rd: %d\n", a.KthOfSortedArrays(arr1, arr2, 2))
+		fmt.Printf("4th: %d\n", a.KthOfSortedArrays(arr1, arr2, 3))
+		fmt.Printf("5th: %d\n", a.KthOfSortedArrays(arr1, arr2, 4))
+		fmt.Printf("6th: %d\n", a.KthOfSortedArrays(arr1, arr2, 5))
+		fmt.Printf("7th: %d\n", a.KthOfSortedArrays(arr1, arr2, 6))
+		fmt.Printf("8th: %d\n", a.KthOfSortedArrays(arr1, arr2, 7))
+		fmt.Printf("9th: %d\n", a.KthOfSortedArrays(arr1, arr2, 8))
+		fmt.Printf("10th: %d\n", a.KthOfSortedArrays(arr1, arr2, 9))
+		fmt.Printf("11th: %d\n", a.KthOfSortedArrays(arr1, arr2, 10))
+		fmt.Printf("12th: %d\n", a.KthOfSortedArrays(arr1, arr2, 11))
+		fmt.Printf("13th: %d\n", a.KthOfSortedArrays(arr1, arr2, 12))
+		fmt.Printf("14th: %d\n", a.KthOfSortedArrays(arr1, arr2, 13))
+	}
+
+	if tasks.Contains("kth of sorted array") {
+		arr1 := []int{5, 5, 5, 10, 20}
+		arr2 := []int{5, 10, 5, 5, 20}
+
+		fmt.Printf("can complete seq 1? %v\n", a.LemonadeChange(arr1))
+		fmt.Printf("can complete seq 2? %v\n", a.LemonadeChange(arr2))
 	}
 }
