@@ -29,6 +29,13 @@ func Constructor(capacity int) LFUCache {
 // Get returns a value from LFU Cache
 func (cache *LFUCache) Get(key int) int {
 	if res := cache.store[key]; res.freqLine != nil {
+		// move this cacheValue from its current freqNode to the next freqNode;
+		// if the next freqNode's frequency is not larger than 1, create a new freqNode
+		curFreqNode := res.freqLine
+		curFreqNode.keys = append(curFreqNode.keys[:res.freqLinePos], curFreqNode.keys[res.freqLinePos+1:]...)
+
+		nextFreqNode := curFreqNode.next
+
 		return res.val
 	}
 
@@ -48,10 +55,20 @@ func (cache *LFUCache) Put(key int, value int) {
 			freqList := cache.freqList
 			if len(freqList.keys) > 0 {
 				evictee := freqList.keys[0]
-				
+				delete(cache.store, evictee)
 				freqList.keys = freqList.keys[1:len(freqList.keys)]
 			} else {
+				nextFreqKeys := freqList.next.keys
+				evictee := nextFreqKeys[0]
+				delete(cache.store, evictee)
 
+				if len(nextFreqKeys) > 1 {
+					nextFreqKeys = nextFreqKeys[1:len(nextFreqKeys)]
+				} else {
+					oldNext := freqList.next
+					freqList.next = oldNext.next
+					oldNext = nil
+				}
 			}
 		}
 
