@@ -36,10 +36,12 @@ func (node *freqNode) removeHead() {
 }
 
 func (node *freqNode) appendTail(newKey *cacheKeyNode) {
-	if node.keyListSize == 0 {
-		node.keyListHead = newKey
-	} else {
+	if node.keyListSize > 0 {
 		node.keyListTail.insertAfter(newKey)
+	}
+
+	if node.keyListHead == nil {
+		node.keyListHead = newKey
 	}
 	node.keyListTail = newKey
 	node.keyListSize++
@@ -89,12 +91,7 @@ func Constructor(capacity int) LFUCache {
 	return LFUCache{capacity, map[int]cacheValue{}, &freqList}
 }
 
-// Get returns a value from LFU Cache
-func (cache *LFUCache) Get(key int) int {
-	if cache.cap == 0 {
-		return -1
-	}
-
+func (cache *LFUCache) addFreq(key int) {
 	if res := cache.store[key]; res.freqLine != nil {
 		// move this cacheValue from its current freqNode to the next freqNode;
 		// if the next freqNode's frequency is exactly larger by 1, append to the next freqNode
@@ -127,6 +124,17 @@ func (cache *LFUCache) Get(key int) int {
 
 		res.keyInFreqLine = newKeyNode
 		cache.store[key] = res
+	}
+}
+
+// Get returns a value from LFU Cache
+func (cache *LFUCache) Get(key int) int {
+	if cache.cap == 0 {
+		return -1
+	}
+
+	if res := cache.store[key]; res.freqLine != nil {
+		cache.addFreq(key)
 		return res.val
 	}
 
@@ -142,42 +150,27 @@ func (cache *LFUCache) Put(key int, value int) {
 	// checks if this key already exists; if so, updates the value
 	if cur := cache.store[key]; cur.freqLine != nil {
 		cur.val = value
-
-		// move this cacheKeyNode to the tail of its freqLine
-		newKeyNode := &cacheKeyNode{cur.keyInFreqLine.key, cur.freqLine.keyListTail, nil}
-		if cur.keyInFreqLine == cur.freqLine.keyListHead {
-			cur.freqLine.keyListHead = cur.keyInFreqLine.next
-		}
-		cur.keyInFreqLine.deleteSelf()
-		cur.keyInFreqLine = newKeyNode
-		cur.freqLine.keyListTail = newKeyNode
 		cache.store[key] = cur
+		cache.addFreq(key)
 	} else {
 		freqList := cache.freqList
 		// not existing currently; evict the LFRU and create a new one
 		if len(cache.store) == cache.cap {
 			// freqList head represents 0-used values; the next freqNode
 			// represents the next smallest frequency
-			if freqList.keyListSize > 0 {
-				delete(cache.store, freqList.keyListHead.key)
-				freqList.removeHead()
-			} else {
-				curFreqNode := freqList.next
-				delete(cache.store, curFreqNode.keyListHead.key)
-
-				if curFreqNode.keyListSize > 1 {
+			removed := false
+			curFreqNode := freqList
+			for !removed {
+				if curFreqNode.keyListSize > 0 {
+					delete(cache.store, curFreqNode.keyListHead.key)
 					curFreqNode.removeHead()
-				} else {
-					// oldNext := freqList.next
-					// freqList.next = oldNext.next
-					// oldNext = nil
-					freqList.next = curFreqNode.next
-					curFreqNode = nil
+					removed = true
 				}
+				curFreqNode = curFreqNode.next
 			}
 		}
 
-		newKeyNode := &cacheKeyNode{key, nil, nil}
+		newKeyNode := &cacheKeyNode{key, freqList.keyListTail, nil}
 		freqList.appendTail(newKeyNode)
 		cache.store[key] = cacheValue{value, freqList, newKeyNode}
 	}
