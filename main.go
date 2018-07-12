@@ -14,9 +14,10 @@ func main() {
 	})
 	runAlgorithms(f.Set{
 		// "fibonacci":   f.SetValStub,
-		"binary tree":         f.SetValStub,
-		"kth of sorted array": f.SetValStub,
-		"lemonade change":     f.SetValStub,
+		// "binary tree":         f.SetValStub,
+		// "kth of sorted array": f.SetValStub,
+		// "lemonade change":     f.SetValStub,
+		"jump game": f.SetValStub,
 	})
 }
 
@@ -100,5 +101,10 @@ func runAlgorithms(tasks f.Set) {
 
 		fmt.Printf("can complete seq 1? %v\n", a.LemonadeChange(arr1))
 		fmt.Printf("can complete seq 2? %v\n", a.LemonadeChange(arr2))
+	}
+
+	if tasks.Contains("jump game") {
+		nums1 := []int{2, 3, 1, 1, 4}
+		fmt.Printf("can jump %v\t?: %v\n", nums1, a.CanJump(nums1))
 	}
 }
