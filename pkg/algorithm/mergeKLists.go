@@ -8,5 +8,5 @@ type ListNode struct {
 
 // MergeKLists merges a number of sorted lists together
 func MergeKLists(lists []*ListNode) *ListNode {
-	
+	return nil
 }
