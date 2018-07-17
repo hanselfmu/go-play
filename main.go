@@ -19,6 +19,7 @@ func main() {
 		// "lemonade change":     f.SetValStub,
 		// "jump game": f.SetValStub,
 		"repeat to contain": f.SetValStub,
+		"zig zag":           f.SetValStub,
 	})
 }
 
@@ -39,7 +40,6 @@ func runfundamentals(tasks f.Set) {
 }
 
 func runAlgorithms(tasks f.Set) {
-	fmt.Println("testing this shit", 1/2)
 	treeValues := []f.Comparable{
 		f.ComparableInt(20),
 		f.ComparableInt(1),
@@ -113,5 +113,10 @@ func runAlgorithms(tasks f.Set) {
 		strA := "acdcee"
 		strB := "eacdceeacdceeacd"
 		fmt.Printf("%s needs to be repeated %d times to contain %s\n", strA, a.RepeatToContain(strA, strB), strB)
+	}
+
+	if tasks.Contains("zig zag") {
+		s := "ABCDE"
+		fmt.Printf("%s with rows: %d: %s\n", s, 3, a.ConvertZigZag(s, 4))
 	}
 }
