@@ -18,8 +18,9 @@ func main() {
 		// "kth of sorted array": f.SetValStub,
 		// "lemonade change":     f.SetValStub,
 		// "jump game": f.SetValStub,
-		"repeat to contain": f.SetValStub,
-		"zig zag":           f.SetValStub,
+		// "repeat to contain": f.SetValStub,
+		// "zig zag":           f.SetValStub,
+		"painter partition": f.SetValStub,
 	})
 }
 
@@ -118,5 +119,11 @@ func runAlgorithms(tasks f.Set) {
 	if tasks.Contains("zig zag") {
 		s := "ABCDE"
 		fmt.Printf("%s with rows: %d: %s\n", s, 3, a.ConvertZigZag(s, 4))
+	}
+
+	if tasks.Contains("painter partition") {
+		k := 3
+		values := []int{3, 5, 10, 2, 4, 6, 2, 2, 3}
+		fmt.Printf("painter partition: k = %d, values = %v\nresult is %v\n", k, values, a.PainterPartition(k, values))
 	}
 }
