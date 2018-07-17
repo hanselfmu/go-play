@@ -17,7 +17,8 @@ func main() {
 		// "binary tree":         f.SetValStub,
 		// "kth of sorted array": f.SetValStub,
 		// "lemonade change":     f.SetValStub,
-		"jump game": f.SetValStub,
+		// "jump game": f.SetValStub,
+		"repeat to contain": f.SetValStub,
 	})
 }
 
@@ -106,5 +107,11 @@ func runAlgorithms(tasks f.Set) {
 	if tasks.Contains("jump game") {
 		nums1 := []int{2, 3, 1, 1, 4}
 		fmt.Printf("can jump %v\t?: %v\n", nums1, a.CanJump(nums1))
+	}
+
+	if tasks.Contains("repeat to contain") {
+		strA := "acdcee"
+		strB := "eacdceeacdceeacd"
+		fmt.Printf("%s needs to be repeated %d times to contain %s\n", strA, a.RepeatToContain(strA, strB), strB)
 	}
 }
