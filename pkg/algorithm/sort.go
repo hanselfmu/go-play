@@ -1,8 +1,12 @@
 package algorithm
 
+import (
+	"runtime"
+)
+
 // QuickSortBasic implements the quicksort algorithm
 // worst case theta(n^2), average case expected O(nlogn)
-// This implementation is in-place
+// This implementation is out-of-place, but an in-place quicksort is available.
 func QuickSortBasic(A []int) []int {
 	size := len(A)
 	if size <= 1 {
@@ -135,5 +139,107 @@ func HeapSortBasic(A []int) []int {
 		sortedStart--
 	}
 
+	return A
+}
+
+// MergeSortBasic sorts an array of ints using mergesort in O(nlogn).
+// This implementation is out-of-place. Note that a carefully designed in-place mergesort is available.
+func MergeSortBasic(A []int) []int {
+	size := len(A)
+	if size <= 1 {
+		return A
+	}
+	mid := size / 2
+	left := MergeSortBasic(A[:mid])
+	right := MergeSortBasic(A[mid:])
+
+	sizeL := len(left)
+	sizeR := len(right)
+	idxL := 0
+	idxR := 0
+	result := make([]int, 0, sizeL+sizeR)
+	for idxL < sizeL && idxR < sizeR {
+		if left[idxL] < right[idxR] {
+			result = append(result, left[idxL])
+			idxL++
+		} else {
+			result = append(result, right[idxR])
+			idxR++
+		}
+	}
+	if idxL < sizeL {
+		result = append(result, left[idxL:]...)
+	} else {
+		result = append(result, right[idxR:]...)
+	}
+	return result
+}
+
+// MergeSortGoroutine sorts an array of ints using mergesort with the help of Goroutine.
+func MergeSortGoroutine(A []int) []int {
+	total := len(A)
+	numsOfCores := runtime.GOMAXPROCS(0)
+	goroutineThreshold := total * 2 / numsOfCores
+	c := make(chan []int)
+	go doMergeSort(A, c, goroutineThreshold)
+	return <-c
+}
+
+func doMergeSort(A []int, c chan []int, goroutineThreshold int) {
+	size := len(A)
+	if size <= 1 {
+		c <- A
+		return
+	} else if size == 2 {
+		if A[0] < A[1] {
+			c <- A
+			return
+		}
+		t := A[1]
+		A[1] = A[0]
+		A[0] = t
+		c <- A
+		return
+
+	}
+	mid := size / 2
+	var left, right []int
+	if size > goroutineThreshold {
+		// https://stackoverflow.com/questions/25860633/order-of-goroutine-unblocking-on-single-channel
+		// as to why a new channel is needed: the unblocking order is not guaranteed, and definitely not LIFO right now.
+		newC := make(chan []int)
+		go doMergeSort(A[:mid], newC, goroutineThreshold)
+		go doMergeSort(A[mid:], newC, goroutineThreshold)
+		left, right = <-newC, <-newC
+	} else {
+		left = MergeSortBasic(A[:mid])
+		right = MergeSortBasic(A[mid:])
+	}
+
+	sizeL := len(left)
+	sizeR := len(right)
+	idxL := 0
+	idxR := 0
+	result := make([]int, 0, sizeL+sizeR)
+	for idxL < sizeL && idxR < sizeR {
+		if left[idxL] < right[idxR] {
+			result = append(result, left[idxL])
+			idxL++
+		} else {
+			result = append(result, right[idxR])
+			idxR++
+		}
+	}
+	if idxL < sizeL {
+		result = append(result, left[idxL:]...)
+	} else {
+		result = append(result, right[idxR:]...)
+	}
+	c <- result
+}
+
+// MergeSortIterative implements an iterative version of mergesort.
+func MergeSortIterative(A []int) []int {
+	// todo: implement this
 	return A
 }
