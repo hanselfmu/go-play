@@ -20,7 +20,11 @@ func main() {
 		// "jump game": f.SetValStub,
 		// "repeat to contain": f.SetValStub,
 		// "zig zag":           f.SetValStub,
-		"painter partition": f.SetValStub,
+		// "painter partition": f.SetValStub,
+		// "three sum": f.SetValStub,
+		// "longest valid ()": f.SetValStub,
+		// "dungeon game": f.SetValStub,
+		// "unique path": f.SetValStub,
 	})
 }
 
@@ -125,5 +129,26 @@ func runAlgorithms(tasks f.Set) {
 		k := 3
 		values := []int{3, 5, 10, 2, 4, 6, 2, 2, 3}
 		fmt.Printf("painter partition: k = %d, values = %v\nresult is %v\n", k, values, a.PainterPartition(k, values))
+	}
+
+	if tasks.Contains("three sum") {
+		values := []int{-4, -2, -2, -2, 0, 1, 2, 2, 2, 3, 3, 4, 4, 6, 6}
+		fmt.Printf("three sum values = %d\nresult = %d\n", values, a.ThreeSum(values))
+	}
+
+	if tasks.Contains("longest valid ()") {
+		s := "()"
+		fmt.Printf("longest valid parentheses for %s is: %d\n", s, a.LongestValidParentheses(s))
+	}
+
+	if tasks.Contains("dungeon game") {
+		input := [][]int{{-2, -3, 3}, {-5, -10, 1}, {10, 30, -5}}
+		fmt.Printf("dungeon game result: %d\n", a.DungeonGame(input))
+	}
+
+	if tasks.Contains("unique path") {
+		m := 2
+		n := 100
+		fmt.Printf("unique path result: %d\n", a.UniquePaths(m, n))
 	}
 }
