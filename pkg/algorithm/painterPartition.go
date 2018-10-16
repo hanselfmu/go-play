@@ -13,6 +13,7 @@ func PainterPartition(k int, seq []int) []int {
 	partitions := make([]partition, k)
 
 	if k >= seqLen {
+		// O(N)
 		res := make([]int, seqLen)
 		for i := range res {
 			res[i] = 1
@@ -20,31 +21,31 @@ func PainterPartition(k int, seq []int) []int {
 		return res
 	}
 
-	// 3, 2, 5, 7, 4, 2, 9, 3, 8
-	// 3 | 2 | 5 7 2 9 3 8
 	// initialize
+	// O(K)
 	for i := 0; i < k-1; i++ {
 		initialPartition := seq[i]
 		partitions[i] = partition{[]int{initialPartition}, initialPartition}
 	}
-	remainingSum := calculateSum(seq[k:])
-	// totalSum := calculateSum(seq)
-	// globalMin := totalSum / k
-	partitions[k-1] = partition{seq[k:], remainingSum}
+	// O(N)
+	remainingSum := calculateSum(seq[k-1:])
+	partitions[k-1] = partition{seq[k-1:], remainingSum}
 
 	isStable := false
 	// loop until stable condition
+	// O(N)
 	for !isStable {
 		updated := false
 
+		// O(K)
 		for i := k - 1; i > 0; i-- {
 			curPart := partitions[i]
 			prevPart := partitions[i-1]
 			curPartLen := len(curPart.values)
 			if curPartLen > 1 {
-				move := curPart.values[curPartLen-1]
+				move := curPart.values[0]
 				if getMax(curPart.sum-move, prevPart.sum+move) <= getMax(curPart.sum, prevPart.sum) {
-					curPart.values = curPart.values[:curPartLen-1]
+					curPart.values = curPart.values[1:]
 					curPart.sum = curPart.sum - move
 					prevPart.values = append(prevPart.values, move)
 					prevPart.sum = prevPart.sum + move
@@ -60,10 +61,76 @@ func PainterPartition(k int, seq []int) []int {
 	// return partition counts
 	res := make([]int, k)
 	for i := range res {
-		fmt.Printf("partition %d: %v with sum %d\n", i, partitions[i].values, partitions[i].sum)
 		res[i] = len(partitions[i].values)
 	}
 	return res
+}
+
+// LargestSumOfAverages calculates the largest sum of partitioning a group of integers
+// LeetCode #813
+func LargestSumOfAverages(A []int, K int) float64 {
+	seq := A
+	k := K
+	seqLen := len(seq)
+	if k == 0 || k == 1 {
+		return float64(calculateSum(seq)) / float64(seqLen)
+	}
+
+	partitions := make([]partition, k)
+
+	if k >= seqLen {
+		// O(N)
+		return float64(calculateSum(seq))
+	}
+
+	// initialize
+	// O(K)
+	for i := 0; i < k-1; i++ {
+		initialPartition := seq[i]
+		partitions[i] = partition{[]int{initialPartition}, initialPartition}
+	}
+	// O(N)
+	remainingSum := calculateSum(seq[k-1:])
+	partitions[k-1] = partition{seq[k-1:], remainingSum}
+
+	isStable := false
+	// loop until stable condition
+	// O(N)
+	for !isStable {
+		updated := false
+		for i, p := range partitions {
+			fmt.Printf("partition %d: %v\n", i, p.values)
+		}
+		// O(K)
+		for i := k - 1; i > 0; i-- {
+			curPart := partitions[i]
+			prevPart := partitions[i-1]
+			curPartLen := len(curPart.values)
+			prevPartLen := len(prevPart.values)
+			if curPartLen > 1 {
+				move := curPart.values[0]
+				curAvgSum := float64(curPart.sum)/float64(curPartLen) + float64(prevPart.sum)/float64(prevPartLen)
+				newAvgSum := float64(curPart.sum-move)/float64(curPartLen-1) + float64(prevPart.sum+move)/float64(prevPartLen+1)
+
+				if newAvgSum >= curAvgSum {
+					curPart.values = curPart.values[1:]
+					curPart.sum = curPart.sum - move
+					prevPart.values = append(prevPart.values, move)
+					prevPart.sum = prevPart.sum + move
+					partitions[i] = curPart
+					partitions[i-1] = prevPart
+					updated = true
+				}
+			}
+		}
+		isStable = !updated
+	}
+
+	sum := 0.0
+	for _, part := range partitions {
+		sum += float64(part.sum) / float64(len(part.values))
+	}
+	return sum
 }
 
 func getMax(a, b int) int {
