@@ -38,17 +38,17 @@ func HeapSortBasic(A []int) []int {
 	if size <= 1 {
 		return A
 	}
-	// Min Heap is a complete tree, so we don't need a binary linked list to represent;
+	// Max Heap is a complete tree, so we don't need a binary linked list to represent;
 	// a dynamic array (like a slice in Go) will suffice.
 
-	// build up a min heap, O(nlogn)
+	// build up a max heap, O(nlogn)
 	for idx, val := range A[1:] {
 		curIdx := idx + 1
 		parentIdx := (curIdx - 1) / 2
 		A[curIdx] = val
 		curVal := val
 		parentVal := A[parentIdx]
-		for curVal < parentVal {
+		for curVal > parentVal {
 			A[curIdx] = parentVal
 			A[parentIdx] = curVal
 			curIdx = parentIdx
@@ -59,14 +59,14 @@ func HeapSortBasic(A []int) []int {
 	}
 
 	// doing siftDowns from the bottom of the tree by:
-	// 1. moving the topmost element (currently smallest) to the end of the current sorted list;
+	// 1. moving the topmost element (currently largest) to the end of the current sorted list;
 	// 2. taking the last element in the array and put it at the now-empty root;
-	// 3. move this newly placed element down the tree until the minHeap property is restored
+	// 3. move this newly placed element down the tree until the maxHeap property is restored
 	sortedStart := size - 1
 	for sortedStart >= 0 {
-		curMin := A[0]
+		curMax := A[0]
 		A[0] = A[sortedStart]
-		A = append(append(A[0:sortedStart], A[sortedStart+1:]...), curMin)
+		A[sortedStart] = curMax
 
 		// step 3
 		curIdx := 0
@@ -78,8 +78,8 @@ func HeapSortBasic(A []int) []int {
 				curVal := A[curIdx]
 				leftVal := A[leftIdx]
 				rightVal := A[rightIdx]
-				if curVal > leftVal && curVal > rightVal {
-					if leftVal > rightVal {
+				if curVal < leftVal && curVal < rightVal {
+					if leftVal < rightVal {
 						// switch cur with right
 						temp := A[curIdx]
 						A[curIdx] = A[rightIdx]
@@ -92,12 +92,12 @@ func HeapSortBasic(A []int) []int {
 						A[leftIdx] = temp
 						curIdx = leftIdx
 					}
-				} else if curVal > leftVal {
+				} else if curVal < leftVal {
 					temp := A[curIdx]
 					A[curIdx] = A[leftIdx]
 					A[leftIdx] = temp
 					curIdx = leftIdx
-				} else if curVal > rightVal {
+				} else if curVal < rightVal {
 					temp := A[curIdx]
 					A[curIdx] = A[rightIdx]
 					A[rightIdx] = temp
@@ -108,7 +108,7 @@ func HeapSortBasic(A []int) []int {
 			} else if leftIdx < sortedStart {
 				curVal := A[curIdx]
 				leftVal := A[leftIdx]
-				if curVal > leftVal {
+				if curVal < leftVal {
 					temp := A[curIdx]
 					A[curIdx] = A[leftIdx]
 					A[leftIdx] = temp
@@ -119,7 +119,7 @@ func HeapSortBasic(A []int) []int {
 			} else if rightIdx < sortedStart {
 				curVal := A[curIdx]
 				rightVal := A[rightIdx]
-				if curVal > rightVal {
+				if curVal < rightVal {
 					temp := A[curIdx]
 					A[curIdx] = A[rightIdx]
 					A[rightIdx] = temp
@@ -178,8 +178,8 @@ func MergeSortBasic(A []int) []int {
 // MergeSortGoroutine sorts an array of ints using mergesort with the help of Goroutine.
 func MergeSortGoroutine(A []int) []int {
 	total := len(A)
-	numsOfCores := runtime.GOMAXPROCS(0)
-	goroutineThreshold := total * 2 / numsOfCores
+	numOfCores := runtime.GOMAXPROCS(0)
+	goroutineThreshold := total * 2 / numOfCores
 	c := make(chan []int)
 	go doMergeSort(A, c, goroutineThreshold)
 	return <-c
