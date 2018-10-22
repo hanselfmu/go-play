@@ -240,6 +240,70 @@ func doMergeSort(A []int, c chan []int, goroutineThreshold int) {
 
 // MergeSortIterative implements an iterative version of mergesort.
 func MergeSortIterative(A []int) []int {
-	// todo: implement this
+	size := len(A)
+	if size <= 1 {
+		return A
+	}
+	mergeSize := 2
+	result := make([]int, size)
+	for mergeSize < size*2 {
+		start := 0
+		end := mergeSize
+		if end > size {
+			end = size
+		}
+		blockSize := mergeSize / 2
+		mid := start + blockSize
+		if mid > size {
+			mid = size
+		}
+		isEndReached := false
+
+		for !isEndReached {
+			// merge
+			idxTarget := start
+			idxL := start
+			idxR := mid
+
+			for idxL < mid && idxR < end {
+				if A[idxL] < A[idxR] {
+					result[idxTarget] = A[idxL]
+					idxL++
+				} else {
+					result[idxTarget] = A[idxR]
+					idxR++
+				}
+				idxTarget++
+			}
+			for idxL < mid {
+				result[idxTarget] = A[idxL]
+				idxL++
+				idxTarget++
+			}
+			for idxR < end {
+				result[idxTarget] = A[idxR]
+				idxR++
+				idxTarget++
+			}
+
+			start = end
+			if end >= size {
+				isEndReached = true
+			} else {
+				start = end
+				end += mergeSize
+				if end > size {
+					end = size
+				}
+				mid = start + blockSize
+				if mid > size {
+					mid = size
+				}
+			}
+		}
+		mergeSize *= 2
+		A = result
+		result = make([]int, size)
+	}
 	return A
 }
