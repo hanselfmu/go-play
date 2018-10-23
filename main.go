@@ -25,6 +25,8 @@ func main() {
 		// "longest valid ()": f.SetValStub,
 		// "dungeon game": f.SetValStub,
 		// "unique path": f.SetValStub,
+		// "search rotated sorted array": f.SetValStub,
+		"fix BST": f.SetValStub,
 	})
 }
 
@@ -150,5 +152,19 @@ func runAlgorithms(tasks f.Set) {
 		m := 2
 		n := 100
 		fmt.Printf("unique path result: %d\n", a.UniquePaths(m, n))
+	}
+
+	if tasks.Contains("search rotated sorted array") {
+		values := []int{4, 5, 6, 7, 8, 0, 1, 2, 3}
+		target := 3
+		fmt.Printf("search rotated sorted array = %d\ntarget = %d\nindex at %d\n", values, target, a.SearchRotatedSortedArray(values, target))
+	}
+
+	if tasks.Contains("fix BST") {
+		root := &a.TreeNode{1, nil, nil}
+		root.Left = &a.TreeNode{3, nil, nil}
+		root.Left.Right = &a.TreeNode{2, nil, nil}
+		fmt.Printf("fix BST\n")
+		a.FixBST(root)
 	}
 }
